@@ -22,5 +22,17 @@
   {
     "names": [ "trace" ],
     "value": 5
+  },
+  {
+    "names": [ "alert" ],
+    "value": -1
+  },
+  {
+    "names": [ "alarm" ],
+    "value": -2
+  },
+  {
+    "names": [ "metric" ],
+    "value": 10
   }
 ]

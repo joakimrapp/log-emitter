@@ -1,6 +1,7 @@
-const levels = require( '../config/levels.json' );
+const config = require( '../config/levels.json' );
+const names = Array.prototype.concat( ...config.map( level => level.names ) );
 module.exports = {
-  has: ( name ) => levels.some( ( { names } ) => names.indexOf( name ) >= 0 ),
-  value: ( name ) => levels.find( ( { names } ) => names.indexOf( name ) >= 0 ).value,
-  values: levels.map( level => level.value )
+	config, names,
+  has: ( name ) => names.indexOf( name ) >= 0,
+  value: ( name ) => config.find( ( { names } ) => names.indexOf( name ) >= 0 ).value,
 };
