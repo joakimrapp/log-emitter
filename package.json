@@ -25,5 +25,8 @@
     "istanbul": "0.4.5",
     "mocha": "3.3.0",
     "stack-trace": "0.0.9"
+  },
+  "dependencies": {
+    "@jrapp/log-levels": "1.0.1"
   }
 }
