@@ -44,6 +44,14 @@ require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
 				resolve();
 			}, 10 );
 		} ) )
+		.it( 'should resolve meta if there is a listener', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			eventEmitters.clear();
+			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {
+				assert.deepEqual( { name, level, message, meta, milliseconds }, { name: 'test', level: 3, message: 'message', meta: 'resolvedmeta', milliseconds: undefined } );
+				resolve();
+			} );
+			log.info( 'message', () => 'resolvedmeta' );
+		} ) )
 		.done()
 	.describe( 'logEmitter.on( config, listener )' )
 		.it( '', ( assert, logEmitter, { eventEmitters } ) => {

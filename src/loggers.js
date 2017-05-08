@@ -10,9 +10,7 @@ class Logger {
 }
 logLevels.forEach( ( { name, value: level } ) => {
 	Logger.prototype[ name ] = function( message, meta, milliseconds ) {
-    if( eventEmitters.has( level ) ) {
-      if( meta instanceof Function )
-				meta = meta();
+    if( eventEmitters.has( level ) )
 			eventEmitters.emit( level, {
 				name: this.moduleName,
 				level,
@@ -20,7 +18,6 @@ logLevels.forEach( ( { name, value: level } ) => {
 				meta: ( meta instanceof Function ) ? meta() : meta,
 				milliseconds
 			} );
-    }
     return this;
   };
 } );
