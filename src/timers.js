@@ -14,9 +14,9 @@ class Timer {
 		return this;
 	}
 }
-logLevels.forEach( ( { name } ) => {
+logLevels.forEach( ( { name, value: level } ) => {
   Timer.prototype[ name ] = function( message, meta ) {
-    if( eventEmitters.has( name ) ) {
+    if( eventEmitters.has( level ) ) {
 			const { log, hrtime } = this;
 			if( this.promise ) {
 				this.promise = this.promise.then( ( data ) => {
