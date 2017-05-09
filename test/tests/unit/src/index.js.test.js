@@ -72,6 +72,7 @@ require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
 		.done()
 	.describe( 'timers' )
 		.it( 'should time something', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			eventEmitters.clear();
 			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {
 				assert.ok( milliseconds >= 9 );
 				resolve();
@@ -80,6 +81,7 @@ require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
 			setTimeout( () => timer.info( 'hopp', 'test' ), 10 );
 		} ) )
 		.it( 'should time a job', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			eventEmitters.clear();
 			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {
 				assert.ok( milliseconds >= 9 );
 			} );
@@ -91,5 +93,30 @@ require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
 					resolve();
 				} );
 		} ) )
+		.it( 'should time a promise reference', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			eventEmitters.clear();
+			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {
+				assert.ok( milliseconds >= 9 );
+			} );
+			log.timer( new Promise( ( resolve ) => setTimeout( () => resolve( 123 ), 10 ) ) )
+				.info( 'done', 'ok' )
+				.promise.then( ( value ) => {
+					assert( value, 123 );
+					resolve();
+				} );
+		} ) )
+		.it( 'should handle a timer reference', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			eventEmitters.clear();
+			console.log( 112343245342 );
+			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {
+				assert.ok( milliseconds >= 9 );
+				resolve();
+			} );
+			const reference = {};
+			log.timer( reference );
+			setTimeout( () => log.timer( reference ).info( 'test' ), 10 );
+		} ) )
+		.it( 'should return undefined', ( assert, loggers, { log } ) => assert.ok( log.timer().undefined === undefined ) )
+		.it( 'should return undefined', ( assert, loggers, { log } ) => assert.ok( log.timer().undef === undefined ) )
 		.done()
 	.done();
