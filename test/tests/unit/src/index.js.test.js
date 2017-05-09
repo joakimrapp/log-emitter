@@ -54,8 +54,20 @@ require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
 		} ) )
 		.done()
 	.describe( 'logEmitter.on( config, listener )' )
-		.it( '', ( assert, logEmitter, { eventEmitters } ) => {
-
-		} )
+		.it( 'should capture all registered events', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			eventEmitters.clear();
+		 	let count = 0;
+			logEmitter.on( [ '*', '!>3', '!<0' ], ( { name, level, message, meta, milliseconds } ) => count += level );
+			log.fatal( 'message' );
+			log.error( 'message' );
+			log.warn( 'message' );
+			log.info( 'message' );
+			log.debug( 'message' );
+			log.trace( 'message' );
+			setTimeout( () => {
+				assert.equal( count, 6 );
+				resolve();
+			}, 10 );
+		} ) )
 		.done()
 	.done();
