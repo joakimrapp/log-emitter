@@ -107,7 +107,6 @@ require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
 		} ) )
 		.it( 'should handle a timer reference', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
 			eventEmitters.clear();
-			console.log( 112343245342 );
 			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {
 				assert.ok( milliseconds >= 9 );
 				resolve();
@@ -115,6 +114,13 @@ require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
 			const reference = {};
 			log.timer( reference );
 			setTimeout( () => log.timer( reference ).info( 'test' ), 10 );
+		} ) )
+		.it( 'should handle a timer without a listener', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			eventEmitters.clear();
+			const reference = {};
+			log.timer( new Promise( ( resolve ) => setTimeout( () => resolve( 123 ), 10 ) ) )
+				.info( 'test' )
+				.promise.then( () => resolve() );
 		} ) )
 		.it( 'should return undefined', ( assert, loggers, { log } ) => assert.ok( log.timer().undefined === undefined ) )
 		.it( 'should return undefined', ( assert, loggers, { log } ) => assert.ok( log.timer().undef === undefined ) )
