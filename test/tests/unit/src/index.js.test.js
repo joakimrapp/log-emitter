@@ -70,4 +70,26 @@ require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
 			}, 10 );
 		} ) )
 		.done()
+	.describe( 'timers' )
+		.it( 'should time something', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {
+				assert.ok( milliseconds >= 9 );
+				resolve();
+			} );
+			const timer = log.timer();
+			setTimeout( () => timer.info( 'hopp', 'test' ), 10 );
+		} ) )
+		.it( 'should time a job', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {
+				assert.ok( milliseconds >= 9 );
+			} );
+			log.timer()
+				.job( new Promise( ( resolve ) => setTimeout( () => resolve( 123 ), 10 ) ) )
+				.info( 'done', 'ok' )
+				.promise.then( ( value ) => {
+					assert( value, 123 );
+					resolve();
+				} );
+		} ) )
+		.done()
 	.done();
