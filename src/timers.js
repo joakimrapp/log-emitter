@@ -23,7 +23,8 @@ logLevels.forEach( ( { name, value: level } ) => {
     if( eventEmitters.has( level ) ) {
 			const { log, hrtime } = this;
 			if( this.promise )
-				this.promise = this.promise.then( data => log[ name ]( message, meta, Timer.milliseconds( hrtime ) ).return( data ) );
+				this.promise = this.promise.then( data =>
+					log[ name ]( message, meta instanceof Function ? meta( data ) : meta, Timer.milliseconds( hrtime ) ).return( data ) );
 			else
 	     	log[ name ]( message, meta, Timer.milliseconds( hrtime ) );
     }
