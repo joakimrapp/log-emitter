@@ -1,6 +1,10 @@
 const logLevels = require( '@jrapp/log-levels' );
 const eventEmitters = require( './eventEmitters.js' );
 class Timer {
+	static milliseconds( hrtime ) {
+		const [ seconds, nanoseconds ] = process.hrtime( hrtime );
+		return ( ( seconds * 1e9 ) + nanoseconds ) / 1e6;
+	}
   constructor( log ) { this.log = log; }
   start() {
     this.hrtime = process.hrtime();
@@ -18,17 +22,10 @@ logLevels.forEach( ( { name, value: level } ) => {
   Timer.prototype[ name ] = function( message, meta ) {
     if( eventEmitters.has( level ) ) {
 			const { log, hrtime } = this;
-			if( this.promise ) {
-				this.promise = this.promise.then( ( data ) => {
-					const [ seconds, nanoseconds ] = process.hrtime( hrtime );
-		      log[ name ]( message, meta, ( ( seconds * 1e9 ) + nanoseconds ) / 1e6 );
-					return data;
-				} );
-			}
-			else {
-				const [ seconds, nanoseconds ] = process.hrtime( hrtime );
-	     	log[ name ]( message, meta, ( ( seconds * 1e9 ) + nanoseconds ) / 1e6 );
-			}
+			if( this.promise )
+				this.promise = this.promise.then( data => log[ name ]( message, meta, Timer.milliseconds( hrtime ) ).return( data ) );
+			else
+	     	log[ name ]( message, meta, Timer.milliseconds( hrtime ) );
     }
     return this;
   };
@@ -37,9 +34,8 @@ module.exports = ( log ) => {
   const timers = new WeakMap();
   return ( reference ) => {
 		if( reference ) {
-			if( reference.then ) {
+			if( reference.then instanceof Function )
 				return ( new Timer( log ) ).job( reference );
-			}
 			else {
 				let timer = timers.get( reference );
 				if( timer )
