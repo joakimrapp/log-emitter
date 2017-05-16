@@ -8,6 +8,7 @@ class Timer {
   }
   get undefined() { return undefined; }
   get undef() { return undefined; }
+	value( value ) { return value; }
 	job( job ) {
 		this.promise = Promise.resolve( job );
 		this.hrtime = process.hrtime();
