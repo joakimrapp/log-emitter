@@ -93,6 +93,19 @@ require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
 					resolve();
 				} );
 		} ) )
+		.it( 'should time a job and have the result as meta argument', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
+			eventEmitters.clear();
+			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {
+				assert.equal( meta, '123' );
+			} );
+			log.timer()
+				.job( new Promise( ( resolve ) => setTimeout( () => resolve( 123 ), 10 ) ) )
+				.info( 'done', ( result ) => result )
+				.promise.then( ( value ) => {
+					assert( value, 123 );
+					resolve();
+				} );
+		} ) )
 		.it( 'should time a promise reference', ( assert, logEmitter, { eventEmitters, log } ) => new Promise( resolve => {
 			eventEmitters.clear();
 			logEmitter.on( 'info', ( { name, level, message, meta, milliseconds } ) => {

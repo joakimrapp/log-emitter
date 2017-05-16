@@ -6,12 +6,13 @@ class Logger {
 	constructor( moduleName ) { Object.assign( this, { moduleName, timer: timers( this ) } ); }
   get undefined() { return undefined; }
   get undef() { return undefined; }
-	value( value ) { return value; }
+	return( value ) { return value; }
 }
 logLevels.forEach( ( { name, value: level } ) => {
 	Logger.prototype[ name ] = function( message, meta, milliseconds ) {
     if( eventEmitters.has( level ) )
 			eventEmitters.emit( level, {
+				timestamp: Date.now(),
 				name: this.moduleName,
 				level,
 				message,
