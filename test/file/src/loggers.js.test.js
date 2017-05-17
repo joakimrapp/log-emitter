@@ -1,4 +1,4 @@
-require( '../../../helpers/unit.js' )( ( loggers ) => ( {} ) )
+require( '@jrapp/node-project-setup' ).testing.file( './test/file' )( ( loggers ) => ( {} ) )
 	.describe( 'loggers.undefined' )
 		.it( 'should return undefined', ( assert, loggers ) =>
 			assert.ok( loggers( 'loggers-test' ).undefined === undefined ) )
