@@ -139,5 +139,6 @@ require( '@jrapp/node-project-setup' ).testing.file( './test/file' )( ( logEmitt
 		.it( 'should return undefined', ( assert, loggers, { log } ) => assert.ok( log.timer().undef === undefined ) )
 		.it( 'should return something from a timer', ( assert, loggers, { log } ) =>
 			assert.equal( log.timer().return( 1.12 ), 1.12 ) )
+		.it( 'should set and get a value', ( assert, loggers, { log } ) => assert.equal( log.timer().set( 3 ).get(), 3 ) )
 		.done()
 	.done();
