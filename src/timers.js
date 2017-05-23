@@ -13,9 +13,11 @@ class Timer {
   get undefined() { return undefined; }
   get undef() { return undefined; }
 	return( value ) { return value; }
+	set( value ) { this.value = value; return this; }
+	get() { return this.value; }
 	job( job ) {
-		this.promise = Promise.resolve( job );
 		this.hrtime = process.hrtime();
+		this.promise = Promise.resolve( job );
 		return this;
 	}
 }

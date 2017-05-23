@@ -1,5 +1,5 @@
-require( '../../../helpers/unit.js' )( ( logEmitter ) => ( {
-	eventEmitters: require( '../../../../src/eventEmitters.js' ),
+require( '@jrapp/node-project-setup' ).testing.file( './test/file' )( ( logEmitter ) => ( {
+	eventEmitters: require( '../../../src/eventEmitters.js' ),
 	log: logEmitter.log( 'test' )
 } ) )
 	.describe( 'logEmitter.log( moduleName )' )

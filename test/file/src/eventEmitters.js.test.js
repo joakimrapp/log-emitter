@@ -1,4 +1,4 @@
-require( '../../../helpers/unit.js' )( ( eventEmitters ) => {} )
+require( '@jrapp/node-project-setup' ).testing.file( './test/file' )( ( eventEmitters ) => {} )
 	.describe( 'eventEmitters.has( level )' )
 		.it( 'should not have a undefined level', ( assert, eventEmitters ) =>
 			assert.ok( !eventEmitters.has( 20 ) ) )
